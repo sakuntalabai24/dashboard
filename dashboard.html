@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Data Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+     body {
+        background-image: url("https://wallpapers.com/images/high/blue-gray-2136-x-2136-background-thld78p78f89mxe0.webp");
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f4f4f9;
+        min-height: 100vh;
+        padding: 5vw;
+        /* background:fixed; */
+        /* overflow: hidden; */
+    } 
+
+    @media(min-width: 900px){
+      body{
+        font-size: 1.2rem;
+      }
+    }
+
+    .dashboard-container {
+        max-width: 900px;
+        width: 100%;
+        margin: 20px auto;
+        background-color:  rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        min-height: 800px;
+    }
+
+    @media (min-width: 600px){
+      .dashboard-container{
+        padding: 20px;
+        max-width: 1000px;
+        width:auto;
+        min-height: 800px;
+
+      }
+
+      .filters{
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+      .filters label{
+        margin-right: 10px;
+      }
+    }
+
+    .dashboard-container h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .filters {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    filter label{
+      width: 100%;
+    }
+   
+    .filters select, .filters input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    canvas {
+        margin: 20px 0;
+        max-width: 100%;
+        height: auto;
+        min-height: 300px;
+    }
+
+    @media (min-width: 900px){
+      .filters{
+        flex-wrap: nowrap;
+      }
+      canvas{
+        margin: 10px auto;
+        min-height: 400px;
+      }
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button, .filters select, .filters input{
+      width: 100%;
+      max-width:  300px;
+    }
+
+    @media (min-width: 600px){
+      button, .filters select, .filters input {
+        width: auto;
+      }
+    }
+
+    button:hover {
+        background-color: #4c9c70;
+    } 
+
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Data Visualization Dashboard</h1>
+
+    <div class="filters">
+      <label>
+        Category:
+        <select id="categoryFilter">
+          <option value="all">All</option>
+          <option value="sales">Sales</option>
+          <option value="engagement">Engagement</option>
+        </select>
+      </label>
+      <label>
+        Date Range:
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+      </label>
+      <button id="applyFilters">Apply Filters</button>
+    </div>
+
+    <canvas id="barChart"></canvas>
+    <canvas id="lineChart"></canvas>
+
+    <button id="logOut">Log Out</button>
+  </div>
+
+  <script>
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May'],
+        datasets: [{
+          label: 'Sales Data',
+          data: [120, 150, 180, 90, 200],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+  
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        datasets: [{
+          label: 'User Engagement',
+          data: [30, 50, 70, 60, 90],
+          borderColor: 'rgba(153, 102, 255, 1)',
+          tension: 0.4,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    
+    document.getElementById('applyFilters').addEventListener('click', () => {
+      const category = document.getElementById('categoryFilter').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+
+      alert(`Filters applied:\nCategory: ${category}\nDate Range: ${startDate} to ${endDate}`);
+
+  
+      barChart.data.datasets[0].data = Array.from({ length: 5 }, () => Math.floor(Math.random() * 200));
+      barChart.update();
+
+      lineChart.data.datasets[0].data = Array.from({ length: 5 }, () => Math.floor(Math.random() * 100));
+      lineChart.update();
+    });
+
+    
+    document.getElementById('logOut').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
